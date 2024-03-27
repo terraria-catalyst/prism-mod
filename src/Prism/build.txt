@@ -1,0 +1,3 @@
+displayName = PRISM - Modern Shading
+author = tomat (Team Catalyst)
+version = 1.0.0
