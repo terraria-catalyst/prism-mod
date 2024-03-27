@@ -1,3 +1,5 @@
 displayName = PRISM - Modern Shading
 author = tomat (Team Catalyst)
 version = 1.0.0
+side = NoSync
+dllReferences = Microsoft.DotNet.PlatformAbstractions,Microsoft.Extensions.DependencyModel,NativeLibraryLoader,ppy.Veldrid,ppy.Veldrid.MetalBindings,ppy.Veldrid.OpenGLBindings,ppy.Veldrid.SPIRV,SharpGen.Runtime.COM,SharpGen.Runtime,vk,Vortice.D3DCompiler,Vortice.Direct3D11,Vortice.DirectX,Vortice.DXGI,Vortice.Mathematics

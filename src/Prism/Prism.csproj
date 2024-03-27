@@ -1,15 +1,65 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <Import Project="../../catalyst/Mod.Build.targets" />
+    <Import Project="../../catalyst/Mod.Build.targets"/>
 
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
         <LangVersion>latest</LangVersion>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <Nullable>enable</Nullable>
-        <RootNamespace>TeamCatlayst.Prism</RootNamespace>
+        <RootNamespace>TeamCatalyst.Prism</RootNamespace>
 
         <AssemblyPublicizerPaths>$(AssemblyPublicizerPaths);$(MSBuildThisFileDirectory)prism.publicizer.js</AssemblyPublicizerPaths>
+
+        <OverrideTMLBuildTask>true</OverrideTMLBuildTask>
     </PropertyGroup>
+
+    <ItemGroup>
+        <Reference Include="Microsoft.DotNet.PlatformAbstractions">
+            <HintPath>lib\Microsoft.DotNet.PlatformAbstractions.dll</HintPath>
+        </Reference>
+        <Reference Include="Microsoft.Extensions.DependencyModel">
+            <HintPath>lib\Microsoft.Extensions.DependencyModel.dll</HintPath>
+        </Reference>
+        <Reference Include="NativeLibraryLoader">
+            <HintPath>lib\NativeLibraryLoader.dll</HintPath>
+        </Reference>
+        <Reference Include="ppy.Veldrid">
+            <HintPath>lib\ppy.Veldrid.dll</HintPath>
+        </Reference>
+        <Reference Include="ppy.Veldrid.MetalBindings">
+            <HintPath>lib\ppy.Veldrid.MetalBindings.dll</HintPath>
+        </Reference>
+        <Reference Include="ppy.Veldrid.OpenGLBindings">
+            <HintPath>lib\ppy.Veldrid.OpenGLBindings.dll</HintPath>
+        </Reference>
+        <Reference Include="ppy.Veldrid.SPIRV">
+            <HintPath>lib\ppy.Veldrid.SPIRV.dll</HintPath>
+        </Reference>
+        <Reference Include="SharpGen.Runtime">
+            <HintPath>lib\SharpGen.Runtime.dll</HintPath>
+        </Reference>
+        <Reference Include="SharpGen.Runtime.COM">
+            <HintPath>lib\SharpGen.Runtime.COM.dll</HintPath>
+        </Reference>
+        <Reference Include="vk">
+            <HintPath>lib\vk.dll</HintPath>
+        </Reference>
+        <Reference Include="Vortice.D3DCompiler">
+            <HintPath>lib\Vortice.D3DCompiler.dll</HintPath>
+        </Reference>
+        <Reference Include="Vortice.Direct3D11">
+            <HintPath>lib\Vortice.Direct3D11.dll</HintPath>
+        </Reference>
+        <Reference Include="Vortice.DirectX">
+            <HintPath>lib\Vortice.DirectX.dll</HintPath>
+        </Reference>
+        <Reference Include="Vortice.DXGI">
+            <HintPath>lib\Vortice.DXGI.dll</HintPath>
+        </Reference>
+        <Reference Include="Vortice.Mathematics">
+            <HintPath>lib\Vortice.Mathematics.dll</HintPath>
+        </Reference>
+    </ItemGroup>
 
 </Project>

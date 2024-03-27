@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prism", "Prism\Prism.csproj", "{7E151245-C7B9-4EBB-8FE2-F2CD0AB5A950}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DependencyCollator", "DependencyCollator\DependencyCollator.csproj", "{AEF4CC02-9BE8-42F7-8D83-8E7FA3DDC186}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,5 +28,9 @@ Global
 		{7E151245-C7B9-4EBB-8FE2-F2CD0AB5A950}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E151245-C7B9-4EBB-8FE2-F2CD0AB5A950}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E151245-C7B9-4EBB-8FE2-F2CD0AB5A950}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AEF4CC02-9BE8-42F7-8D83-8E7FA3DDC186}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEF4CC02-9BE8-42F7-8D83-8E7FA3DDC186}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEF4CC02-9BE8-42F7-8D83-8E7FA3DDC186}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEF4CC02-9BE8-42F7-8D83-8E7FA3DDC186}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
