@@ -44,16 +44,6 @@ namespace TeamCatalyst.Prism {
                                              }
                                              """;
 
-        /*private readonly GraphicsDevice veldridDevice =
-            VeldridStartup.CreateGraphicsDevice(
-                Main.instance,
-                new GraphicsDeviceOptions {
-                    PreferStandardClipSpaceYDirection = true,
-                    PreferDepthRangeZeroToOne = true,
-                }
-            )
-            ?? throw new PlatformNotSupportedException("Failed to initialize graphics device.");*/
-
         public override void Load() {
             base.Load();
 
