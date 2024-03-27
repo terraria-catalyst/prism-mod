@@ -10,7 +10,7 @@ using Veldrid.SPIRV;
 
 namespace Prism {
     [UsedImplicitly]
-    internal static class Unused { }
+    internal static class Unused;
 }
 
 namespace TeamCatalyst.Prism {
@@ -44,13 +44,15 @@ namespace TeamCatalyst.Prism {
                                              }
                                              """;
 
-        private readonly GraphicsDevice veldridDevice;
-
-        public ResourceFactory ResourceFactory => veldridDevice.ResourceFactory;
-
-        public PrismMod() {
-            veldridDevice = VeldridStartup.CreateGraphicsDevice(Main.instance, new GraphicsDeviceOptions { PreferStandardClipSpaceYDirection = true, PreferDepthRangeZeroToOne = true }) ?? throw new PlatformNotSupportedException("Failed to initialize graphics device.");
-        }
+        private readonly GraphicsDevice veldridDevice =
+            VeldridStartup.CreateGraphicsDevice(
+                Main.instance,
+                new GraphicsDeviceOptions {
+                    PreferStandardClipSpaceYDirection = true,
+                    PreferDepthRangeZeroToOne = true,
+                }
+            )
+            ?? throw new PlatformNotSupportedException("Failed to initialize graphics device.");
 
         public override void Load() {
             base.Load();
@@ -62,13 +64,9 @@ namespace TeamCatalyst.Prism {
             Logger.Debug("Vertex: " + vertex_code);
             Logger.Debug("Fragment: " + fragment_code);
 
-            var vertexDesc = new ShaderDescription(ShaderStages.Vertex, Encoding.UTF8.GetBytes(vertex_code), "main");
-            var fragmentDesc = new ShaderDescription(ShaderStages.Fragment, Encoding.UTF8.GetBytes(fragment_code), "main");
-            var shaders = ResourceFactory.CreateFromSpirv(vertexDesc, fragmentDesc);
-
-            foreach (var shader in shaders) {
-                _ = shader;
-            }
+            var vertex = CompileGlslToSpirv(vertex_code, null, ShaderStages.Vertex, new GlslCompileOptions());
+            var fragment = CompileGlslToSpirv(fragment_code, null, ShaderStages.Fragment, new GlslCompileOptions());
+            var shaders = CompileShaders(veldridDevice, vertex, fragment);
         }
 
         private string ExtractNativeDependencies() {
@@ -96,6 +94,66 @@ namespace TeamCatalyst.Prism {
             using var fs = System.IO.File.OpenWrite(fileName);
             dll.CopyTo(fs);
             return fileName;
+        }
+
+        private static SpirvCompilationResult CompileGlslToSpirv(string sourceText, string? fileName, ShaderStages stage, GlslCompileOptions options) {
+            return SpirvCompilation.CompileGlslToSpirv(sourceText, fileName, stage, options);
+        }
+
+        private static Shader[] CompileShaders(GraphicsDevice gd, SpirvCompilationResult vertex, SpirvCompilationResult fragment) {
+            var vertexBytes = vertex.SpirvBytes;
+            var fragmentBytes = fragment.SpirvBytes;
+
+            var backend = GetPlatformGraphicsBackend();
+            if (backend != GraphicsBackend.Vulkan) {
+                var compileTarget = GetPlatformGraphicsBackend() switch {
+                    GraphicsBackend.Direct3D11 => CrossCompileTarget.HLSL,
+                    GraphicsBackend.OpenGL => CrossCompileTarget.GLSL,
+                    _ => throw new NotSupportedException("Unsupported graphics backend.")
+                };
+
+                var result = SpirvCompilation.CompileVertexFragment(
+                    vertexBytes,
+                    fragmentBytes,
+                    compileTarget,
+                    new CrossCompileOptions {
+                        NormalizeResourceNames = true,
+                        InvertVertexOutputY = compileTarget == CrossCompileTarget.HLSL,
+                    }
+                );
+
+                vertexBytes = Encoding.UTF8.GetBytes(result.VertexShader);
+                fragmentBytes = Encoding.UTF8.GetBytes(result.FragmentShader);
+            }
+
+            var vertexShader = gd.ResourceFactory.CreateShader(
+                new ShaderDescription {
+                    ShaderBytes = vertexBytes,
+                    Stage = ShaderStages.Vertex,
+                    EntryPoint = "main",
+                }
+            );
+
+            var fragmentShader = gd.ResourceFactory.CreateShader(
+                new ShaderDescription {
+                    ShaderBytes = fragmentBytes,
+                    Stage = ShaderStages.Fragment,
+                    EntryPoint = "main",
+                }
+            );
+
+            return [ vertexShader, fragmentShader ];
+        }
+
+        private static GraphicsBackend GetPlatformGraphicsBackend() {
+            var preferred = VeldridStartup.GetGraphicsBackend();
+            if (preferred is GraphicsBackend.Direct3D11 or null && OperatingSystem.IsWindows())
+                return GraphicsBackend.Direct3D11;
+
+            if (preferred is GraphicsBackend.OpenGL or null)
+                return GraphicsBackend.OpenGL;
+
+            return GraphicsBackend.Vulkan;
         }
     }
 }

@@ -57,7 +57,7 @@ internal static class VeldridStartup {
         return null;
     }
 
-    private static GraphicsBackend? GetGraphicsBackend() {
+    internal static GraphicsBackend? GetGraphicsBackend() {
         // Set by /gldevice:%s
         var forceDriver = Environment.GetEnvironmentVariable("FNA3D_FORCE_DRIVER");
         return forceDriver switch {
