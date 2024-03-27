@@ -122,7 +122,7 @@ namespace TeamCatalyst.Prism {
         }
 
         private static GraphicsBackend GetPlatformGraphicsBackend() {
-            var preferred = VeldridStartup.GetGraphicsBackend();
+            var preferred = GetGraphicsBackend();
             if (preferred is GraphicsBackend.Direct3D11 or null && OperatingSystem.IsWindows())
                 return GraphicsBackend.Direct3D11;
 
@@ -130,6 +130,18 @@ namespace TeamCatalyst.Prism {
                 return GraphicsBackend.OpenGL;
 
             return GraphicsBackend.Vulkan;
+        }
+
+        private static GraphicsBackend? GetGraphicsBackend() {
+            // Set by /gldevice:%s
+            var forceDriver = Environment.GetEnvironmentVariable("FNA3D_FORCE_DRIVER");
+            return forceDriver switch {
+                // In order of priority:
+                "D3D11" => GraphicsBackend.Direct3D11,
+                "OpenGL" => GraphicsBackend.OpenGL,
+                "Vulkan" => GraphicsBackend.Vulkan,
+                _ => null,
+            };
         }
     }
 }
